@@ -70,3 +70,11 @@ export type BabySize = {
   description: string;
   imageUrl?: string;
 };
+
+export type ChatMessage = {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+};
+

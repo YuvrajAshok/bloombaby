@@ -1,5 +1,6 @@
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getBabySizeForWeek } from "@/utils/babySizeData";
 import { calculateWeek } from "@/utils/trimesterHelper";
@@ -9,6 +10,7 @@ import { BabySize } from "@/types";
 const BabySizeCard = () => {
   const [babySize, setBabySize] = useState<BabySize | null>(null);
   const [pregnancyWeek, setPregnancyWeek] = useState<number>(1);
+  const [showInfo, setShowInfo] = useState(false);
 
   useEffect(() => {
     const user = getCurrentUser();
@@ -24,6 +26,51 @@ const BabySizeCard = () => {
 
   if (!babySize) return null;
 
+  // Define emoji mapping for common fruits/objects
+  const getFruitEmoji = (fruit: string) => {
+    const fruitToEmoji: {[key: string]: string} = {
+      "poppy seed": "🌱",
+      "apple seed": "🍎",
+      "sweet pea": "🫛",
+      "blueberry": "🫐",
+      "raspberry": "🍓",
+      "cherry": "🍒",
+      "strawberry": "🍓",
+      "lime": "🍋",
+      "lemon": "🍋",
+      "orange": "🍊",
+      "avocado": "🥑",
+      "mango": "🥭",
+      "banana": "🍌",
+      "carrot": "🥕",
+      "corn": "🌽",
+      "papaya": "🥔",
+      "eggplant": "🍆",
+      "cucumber": "🥒",
+      "grapefruit": "🍊",
+      "cauliflower": "🥦",
+      "lettuce": "🥬",
+      "coconut": "🥥",
+      "broccoli": "🥦",
+      "cabbage": "🥬",
+      "squash": "🎃",
+      "pumpkin": "🎃",
+      "watermelon": "🍉",
+    };
+    
+    // Find partial matches
+    for (const [key, emoji] of Object.entries(fruitToEmoji)) {
+      if (fruit.toLowerCase().includes(key.toLowerCase())) {
+        return emoji;
+      }
+    }
+    
+    // Default emoji if no match
+    return "👶";
+  };
+
+  const fruitEmoji = getFruitEmoji(babySize.fruit);
+
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-mama-lavender bg-opacity-30 pb-2">
@@ -33,27 +80,76 @@ const BabySizeCard = () => {
       </CardHeader>
       <CardContent className="pt-4">
         <div className="flex flex-col items-center">
-          <div className="text-3xl mb-1">
+          <motion.div 
+            className="text-3xl mb-1"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             Week {pregnancyWeek}
-          </div>
-          <div className="text-xl font-semibold text-primary mb-3">
+          </motion.div>
+          <motion.div 
+            className="text-xl font-semibold text-primary mb-3"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             Size of a {babySize.fruit}
-          </div>
+          </motion.div>
           
-          <div className="bg-mama-softblue p-4 rounded-full mb-4 w-24 h-24 flex items-center justify-center animate-float">
-            <span className="text-center font-medium">{babySize.fruit}</span>
-          </div>
+          <motion.div 
+            className="bg-mama-softblue p-6 rounded-full mb-4 w-28 h-28 flex items-center justify-center cursor-pointer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            animate={{ 
+              y: [0, -10, 0],
+              transition: { 
+                y: { repeat: Infinity, duration: 2, ease: "easeInOut" },
+              }
+            }}
+            onClick={() => setShowInfo(!showInfo)}
+          >
+            <span className="text-5xl">{fruitEmoji}</span>
+          </motion.div>
           
-          <div className="text-sm text-muted-foreground mb-1">
+          <motion.div 
+            className="text-sm text-muted-foreground mb-1"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+          >
             Length: {babySize.length}
-          </div>
-          <div className="text-sm text-muted-foreground mb-4">
+          </motion.div>
+          <motion.div 
+            className="text-sm text-muted-foreground mb-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
             Weight: {babySize.weight}
-          </div>
+          </motion.div>
           
-          <p className="text-center text-sm">
+          <motion.p 
+            className="text-center text-sm"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ 
+              opacity: showInfo ? 1 : 0,
+              height: showInfo ? "auto" : 0,
+            }}
+            transition={{ duration: 0.3 }}
+          >
             {babySize.description}
-          </p>
+          </motion.p>
+          
+          {!showInfo && (
+            <motion.p 
+              className="text-xs text-primary mt-2 cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setShowInfo(true)}
+            >
+              Tap the {babySize.fruit} to learn more!
+            </motion.p>
+          )}
         </div>
       </CardContent>
     </Card>

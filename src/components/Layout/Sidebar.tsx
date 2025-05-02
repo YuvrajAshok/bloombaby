@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Baby, Heart, BookOpen, Calendar, Home } from "lucide-react";
+import { Baby, Heart, BookOpen, Calendar, Home, Robot } from "lucide-react";
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -22,7 +22,7 @@ export function Sidebar() {
       )}>
         {!isCollapsed && (
           <span className="text-lg font-semibold text-primary">
-            Mindful Mama
+            BloomBaby
           </span>
         )}
         <Button
@@ -84,6 +84,12 @@ export function Sidebar() {
               title="Calendar"
               to="/calendar"
               icon={<Calendar className="h-5 w-5" />}
+              isCollapsed={isCollapsed}
+            />
+            <NavItem
+              title="AI Assistant"
+              to="/ai-assistant"
+              icon={<Robot className="h-5 w-5" />}
               isCollapsed={isCollapsed}
             />
           </div>

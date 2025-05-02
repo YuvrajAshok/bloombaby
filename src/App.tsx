@@ -14,6 +14,7 @@ import BirthPlan from "./pages/BirthPlan";
 import Hospitals from "./pages/Hospitals";
 import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
+import AiAssistant from "./pages/AiAssistant";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/hospitals" element={<Hospitals />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/ai-assistant" element={<AiAssistant />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
