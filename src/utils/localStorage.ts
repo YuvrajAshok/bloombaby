@@ -1,5 +1,4 @@
-
-import { User, Symptom, Mood, NutritionLog, EmergencyContact, Exercise, BirthPlanItem } from "@/types";
+import { User, Symptom, Mood, NutritionLog, EmergencyContact, Exercise, BirthPlanItem, Appointment, KickCount, Contraction, ContractionSession } from "@/types";
 
 const USERS_KEY = "mindful_mama_users";
 const CURRENT_USER_KEY = "mindful_mama_current_user";
@@ -9,6 +8,10 @@ const NUTRITION_KEY = "mindful_mama_nutrition";
 const EMERGENCY_CONTACTS_KEY = "mindful_mama_emergency_contacts";
 const EXERCISES_KEY = "mindful_mama_exercises";
 const BIRTH_PLAN_KEY = "mindful_mama_birth_plan";
+const APPOINTMENTS_KEY = "mindful_mama_appointments";
+const KICK_COUNTS_KEY = "mindful_mama_kick_counts";
+const CONTRACTIONS_KEY = "mindful_mama_contractions";
+const CONTRACTION_SESSIONS_KEY = "mindful_mama_contraction_sessions";
 
 // User functions
 export const getUsers = (): User[] => {
@@ -240,4 +243,129 @@ export const deleteBirthPlanItem = (id: string): void => {
   let birthPlan = getBirthPlan();
   birthPlan = birthPlan.filter(item => item.id !== id);
   localStorage.setItem(key, JSON.stringify(birthPlan));
+};
+
+// Appointments functions
+export const getAppointments = (): Appointment[] => {
+  const user = getCurrentUser();
+  if (!user) return [];
+  
+  const key = `${APPOINTMENTS_KEY}_${user.email}`;
+  const appointments = localStorage.getItem(key);
+  return appointments ? JSON.parse(appointments) : [];
+};
+
+export const saveAppointment = (appointment: Appointment): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${APPOINTMENTS_KEY}_${user.email}`;
+  const appointments = getAppointments();
+  appointments.push(appointment);
+  localStorage.setItem(key, JSON.stringify(appointments));
+};
+
+export const updateAppointment = (updatedAppointment: Appointment): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${APPOINTMENTS_KEY}_${user.email}`;
+  let appointments = getAppointments();
+  appointments = appointments.map(appointment => 
+    appointment.id === updatedAppointment.id ? updatedAppointment : appointment
+  );
+  localStorage.setItem(key, JSON.stringify(appointments));
+};
+
+export const deleteAppointment = (id: string): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${APPOINTMENTS_KEY}_${user.email}`;
+  let appointments = getAppointments();
+  appointments = appointments.filter(a => a.id !== id);
+  localStorage.setItem(key, JSON.stringify(appointments));
+};
+
+// Kick Counter functions
+export const getKickCounts = (): KickCount[] => {
+  const user = getCurrentUser();
+  if (!user) return [];
+  
+  const key = `${KICK_COUNTS_KEY}_${user.email}`;
+  const kickCounts = localStorage.getItem(key);
+  return kickCounts ? JSON.parse(kickCounts) : [];
+};
+
+export const saveKickCount = (kickCount: KickCount): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${KICK_COUNTS_KEY}_${user.email}`;
+  const kickCounts = getKickCounts();
+  kickCounts.push(kickCount);
+  localStorage.setItem(key, JSON.stringify(kickCounts));
+};
+
+export const deleteKickCount = (id: string): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${KICK_COUNTS_KEY}_${user.email}`;
+  let kickCounts = getKickCounts();
+  kickCounts = kickCounts.filter(k => k.id !== id);
+  localStorage.setItem(key, JSON.stringify(kickCounts));
+};
+
+// Contraction functions
+export const getContractionSessions = (): ContractionSession[] => {
+  const user = getCurrentUser();
+  if (!user) return [];
+  
+  const key = `${CONTRACTION_SESSIONS_KEY}_${user.email}`;
+  const sessions = localStorage.getItem(key);
+  return sessions ? JSON.parse(sessions) : [];
+};
+
+export const saveContractionSession = (session: ContractionSession): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${CONTRACTION_SESSIONS_KEY}_${user.email}`;
+  let sessions = getContractionSessions();
+  
+  // If updating an existing session
+  if (sessions.some(s => s.id === session.id)) {
+    sessions = sessions.map(s => s.id === session.id ? session : s);
+  } else {
+    // Adding a new session
+    sessions.push(session);
+  }
+  
+  localStorage.setItem(key, JSON.stringify(sessions));
+};
+
+export const saveContraction = (contraction: Contraction, sessionId: string): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${CONTRACTION_SESSIONS_KEY}_${user.email}`;
+  let sessions = getContractionSessions();
+  
+  // Find the session and add the contraction to it
+  const sessionIndex = sessions.findIndex(s => s.id === sessionId);
+  if (sessionIndex !== -1) {
+    sessions[sessionIndex].contractions.push(contraction);
+    localStorage.setItem(key, JSON.stringify(sessions));
+  }
+};
+
+export const deleteContractionSession = (id: string): void => {
+  const user = getCurrentUser();
+  if (!user) return;
+  
+  const key = `${CONTRACTION_SESSIONS_KEY}_${user.email}`;
+  let sessions = getContractionSessions();
+  sessions = sessions.filter(s => s.id !== id);
+  localStorage.setItem(key, JSON.stringify(sessions));
 };

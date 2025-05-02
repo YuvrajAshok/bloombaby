@@ -15,6 +15,10 @@ import Hospitals from "./pages/Hospitals";
 import Calendar from "./pages/Calendar";
 import Profile from "./pages/Profile";
 import AiAssistant from "./pages/AiAssistant";
+import EmergencyContacts from "./pages/EmergencyContacts";
+import Appointments from "./pages/Appointments";
+import KickCounter from "./pages/KickCounter";
+import ContractionTimer from "./pages/ContractionTimer";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +41,10 @@ const App = () => (
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/ai-assistant" element={<AiAssistant />} />
+          <Route path="/emergency-contacts" element={<EmergencyContacts />} />
+          <Route path="/appointments" element={<Appointments />} />
+          <Route path="/kick-counter" element={<KickCounter />} />
+          <Route path="/contraction-timer" element={<ContractionTimer />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

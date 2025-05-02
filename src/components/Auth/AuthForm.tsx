@@ -124,7 +124,7 @@ const AuthForm = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Mindful Mama Journey
+            BloomBaby
           </CardTitle>
           <CardDescription className="text-center">
             Your supportive companion through pregnancy
