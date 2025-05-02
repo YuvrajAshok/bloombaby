@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Baby, Heart, BookOpen, Calendar, Home, Bot } from "lucide-react";
+import { Baby, Heart, BookOpen, Calendar, Home, Bot, Phone, Clock, Bell } from "lucide-react";
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -84,6 +84,31 @@ export function Sidebar() {
               title="Calendar"
               to="/calendar"
               icon={<Calendar className="h-5 w-5" />}
+              isCollapsed={isCollapsed}
+            />
+            {/* Add the newly implemented features to the sidebar */}
+            <NavItem
+              title="Emergency Contacts"
+              to="/emergency-contacts"
+              icon={<Phone className="h-5 w-5" />}
+              isCollapsed={isCollapsed}
+            />
+            <NavItem
+              title="Appointments"
+              to="/appointments"
+              icon={<Calendar className="h-5 w-5" />}
+              isCollapsed={isCollapsed}
+            />
+            <NavItem
+              title="Kick Counter"
+              to="/kick-counter"
+              icon={<Baby className="h-5 w-5" />}
+              isCollapsed={isCollapsed}
+            />
+            <NavItem
+              title="Contraction Timer"
+              to="/contraction-timer"
+              icon={<Clock className="h-5 w-5" />}
               isCollapsed={isCollapsed}
             />
             <NavItem

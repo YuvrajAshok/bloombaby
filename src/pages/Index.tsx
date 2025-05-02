@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BabySizeCard from "@/components/Home/BabySizeCard";
 import TrimesterCard from "@/components/Home/TrimesterCard";
 import QuickQuiz from "@/components/Home/QuickQuiz";
-import { Baby, Heart, BookOpen, Calendar, Bot } from "lucide-react";
+import { Baby, Heart, BookOpen, Calendar, Bot, Phone, Clock, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -70,6 +70,10 @@ const Index = () => {
                 { title: "Update Birth Plan", path: "/birth-plan", icon: <BookOpen className="h-5 w-5 text-purple-400" />, emoji: "📝" },
                 { title: "Find Hospitals", path: "/hospitals", icon: <Heart className="h-5 w-5 text-indigo-400" />, emoji: "🏥" },
                 { title: "View Calendar", path: "/calendar", icon: <Calendar className="h-5 w-5 text-pink-400" />, emoji: "📆" },
+                { title: "Emergency Contacts", path: "/emergency-contacts", icon: <Phone className="h-5 w-5 text-blue-500" />, emoji: "📞" },
+                { title: "Appointments", path: "/appointments", icon: <Calendar className="h-5 w-5 text-indigo-500" />, emoji: "📅" },
+                { title: "Kick Counter", path: "/kick-counter", icon: <Baby className="h-5 w-5 text-green-500" />, emoji: "👶" },
+                { title: "Contraction Timer", path: "/contraction-timer", icon: <Clock className="h-5 w-5 text-red-500" />, emoji: "⏱️" },
                 { title: "Edit Profile", path: "/profile", icon: <Baby className="h-5 w-5 text-teal-400" />, emoji: "👤" },
               ].map((item) => (
                 <Card key={item.path} className="cursor-pointer hover:bg-accent transition-colors group" onClick={() => navigate(item.path)}>
