@@ -1,9 +1,19 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
+import Symptoms from "./pages/Symptoms";
+import Mood from "./pages/Mood";
+import Nutrition from "./pages/Nutrition";
+import Exercise from "./pages/Exercise";
+import BirthPlan from "./pages/BirthPlan";
+import Hospitals from "./pages/Hospitals";
+import Calendar from "./pages/Calendar";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -16,7 +26,15 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/symptoms" element={<Symptoms />} />
+          <Route path="/mood" element={<Mood />} />
+          <Route path="/nutrition" element={<Nutrition />} />
+          <Route path="/exercise" element={<Exercise />} />
+          <Route path="/birth-plan" element={<BirthPlan />} />
+          <Route path="/hospitals" element={<Hospitals />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

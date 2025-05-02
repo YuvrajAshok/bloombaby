@@ -1,0 +1,72 @@
+
+export type User = {
+  email: string;
+  password: string;
+  name: string;
+  dueDate?: Date;
+  currentTrimester?: number;
+};
+
+export type Symptom = {
+  id: string;
+  date: Date;
+  symptomType: string;
+  severity: "mild" | "moderate" | "severe";
+  notes?: string;
+};
+
+export type Mood = {
+  id: string;
+  date: Date;
+  mood: "happy" | "sad" | "anxious" | "calm" | "irritated";
+  notes?: string;
+};
+
+export type NutritionLog = {
+  id: string;
+  date: Date;
+  mealType: "breakfast" | "lunch" | "dinner" | "snack";
+  foodItems: string[];
+  notes?: string;
+};
+
+export type Hospital = {
+  id: string;
+  name: string;
+  address: string;
+  phone: string;
+  distance?: number;
+};
+
+export type EmergencyContact = {
+  id: string;
+  name: string;
+  relationship: string;
+  phone: string;
+};
+
+export type Exercise = {
+  id: string;
+  date: Date;
+  type: string;
+  duration: number;
+  intensity: "light" | "moderate" | "intense";
+  notes?: string;
+};
+
+export type BirthPlanItem = {
+  id: string;
+  category: "environment" | "procedures" | "support" | "pain management" | "postpartum";
+  preference: string;
+  notes?: string;
+};
+
+export type BabySize = {
+  week: number;
+  size: string;
+  fruit: string;
+  length: string;
+  weight: string;
+  description: string;
+  imageUrl?: string;
+};
