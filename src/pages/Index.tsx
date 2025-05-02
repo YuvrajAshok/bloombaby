@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BabySizeCard from "@/components/Home/BabySizeCard";
 import TrimesterCard from "@/components/Home/TrimesterCard";
 import QuickQuiz from "@/components/Home/QuickQuiz";
-import { Baby, Heart, BookOpen, Calendar, Robot } from "lucide-react";
+import { Baby, Heart, BookOpen, Calendar, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
@@ -40,7 +40,7 @@ const Index = () => {
           <div className="absolute top-0 right-0 w-32 h-32 -mr-10 -mt-10 bg-mama-lavender rounded-full opacity-20 animate-pulse"></div>
           <CardHeader className="relative z-10">
             <CardTitle className="flex items-center gap-2">
-              <Robot className="h-5 w-5 text-primary" />
+              <Bot className="h-5 w-5 text-primary" />
               <span>BloomBaby AI Assistant</span>
             </CardTitle>
           </CardHeader>
