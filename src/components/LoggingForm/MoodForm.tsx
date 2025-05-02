@@ -45,10 +45,12 @@ const MoodForm = ({ onSuccess }: MoodFormProps) => {
   const onSubmit = (data: MoodFormValues) => {
     setLoading(true);
     
+    // Ensure all required properties are explicitly set
     const newMood = {
       id: uuidv4(),
       date: new Date(),
-      ...data,
+      mood: data.mood,
+      notes: data.notes,
     };
     
     try {

@@ -56,10 +56,14 @@ const ExerciseForm = ({ onSuccess }: ExerciseFormProps) => {
   const onSubmit = (data: ExerciseFormValues) => {
     setLoading(true);
     
+    // Ensure all required properties are explicitly set
     const newExercise = {
       id: uuidv4(),
       date: new Date(),
-      ...data,
+      type: data.type,
+      duration: data.duration,
+      intensity: data.intensity,
+      notes: data.notes,
     };
     
     try {

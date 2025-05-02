@@ -53,10 +53,13 @@ const SymptomForm = ({ onSuccess }: SymptomFormProps) => {
   const onSubmit = (data: SymptomFormValues) => {
     setLoading(true);
     
+    // Ensure all required properties are explicitly set
     const newSymptom = {
       id: uuidv4(),
       date: new Date(),
-      ...data,
+      symptomType: data.symptomType,
+      severity: data.severity,
+      notes: data.notes,
     };
     
     try {

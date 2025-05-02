@@ -52,9 +52,12 @@ const BirthPlanForm = ({ onSuccess }: BirthPlanFormProps) => {
   const onSubmit = (data: BirthPlanFormValues) => {
     setLoading(true);
     
+    // Ensure all required properties are explicitly set
     const newBirthPlanItem = {
       id: uuidv4(),
-      ...data,
+      category: data.category,
+      preference: data.preference,
+      notes: data.notes,
     };
     
     try {

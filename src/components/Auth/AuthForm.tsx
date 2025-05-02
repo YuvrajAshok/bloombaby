@@ -100,9 +100,12 @@ const AuthForm = () => {
       return;
     }
 
-    // Create new user
+    // Create new user with all required properties
     const newUser = {
-      ...data,
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      dueDate: data.dueDate,
       currentTrimester: data.dueDate ? undefined : undefined, // Will be calculated on login
     };
 
