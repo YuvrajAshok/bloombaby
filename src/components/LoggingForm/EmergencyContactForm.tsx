@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { saveEmergencyContact } from "@/utils/localStorage";
 import { useToast } from "@/components/ui/use-toast";
+import { X } from "lucide-react";
 
 const contactSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
@@ -34,9 +35,10 @@ type EmergencyContactFormValues = z.infer<typeof contactSchema>;
 
 interface EmergencyContactFormProps {
   onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-const EmergencyContactForm = ({ onSuccess }: EmergencyContactFormProps) => {
+const EmergencyContactForm = ({ onSuccess, onCancel }: EmergencyContactFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -144,9 +146,23 @@ const EmergencyContactForm = ({ onSuccess }: EmergencyContactFormProps) => {
           )}
         />
         
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Saving..." : "Save Contact"}
-        </Button>
+        <div className="flex justify-end space-x-4">
+          {onCancel && (
+            <Button 
+              type="button" 
+              variant="outline"
+              size="icon"
+              onClick={onCancel}
+              className="rounded-full"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Cancel</span>
+            </Button>
+          )}
+          <Button type="submit" disabled={loading} className="w-full">
+            {loading ? "Saving..." : "Save Contact"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

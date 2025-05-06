@@ -52,7 +52,6 @@ const formSchema = z.object({
 interface SymptomFormProps {
   onComplete: () => void;
   onCancel: () => void;
-  onSuccess?: () => void; // Add this optional prop to match what Symptoms.tsx is passing
 }
 
 const symptomTypes = [
@@ -70,7 +69,7 @@ const symptomTypes = [
 // Changed to lowercase to match the Symptom type
 const severityLevels = ["mild", "moderate", "severe"];
 
-const SymptomForm = ({ onComplete, onCancel, onSuccess }: SymptomFormProps) => {
+const SymptomForm = ({ onComplete, onCancel }: SymptomFormProps) => {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -104,11 +103,6 @@ const SymptomForm = ({ onComplete, onCancel, onSuccess }: SymptomFormProps) => {
 
     // Call the onComplete callback
     onComplete();
-    
-    // Also call onSuccess if provided
-    if (onSuccess) {
-      onSuccess();
-    }
   };
 
   return (

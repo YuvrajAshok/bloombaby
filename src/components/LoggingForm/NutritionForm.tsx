@@ -24,6 +24,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { saveNutrition } from "@/utils/localStorage";
 import { useToast } from "@/components/ui/use-toast";
+import { X } from "lucide-react";
 
 const nutritionSchema = z.object({
   mealType: z.enum(["breakfast", "lunch", "dinner", "snack"]),
@@ -35,9 +36,10 @@ type NutritionFormValues = z.infer<typeof nutritionSchema>;
 
 interface NutritionFormProps {
   onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
-const NutritionForm = ({ onSuccess }: NutritionFormProps) => {
+const NutritionForm = ({ onSuccess, onCancel }: NutritionFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -149,9 +151,23 @@ const NutritionForm = ({ onSuccess }: NutritionFormProps) => {
           )}
         />
         
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Logging..." : "Log Meal"}
-        </Button>
+        <div className="flex justify-end space-x-4">
+          {onCancel && (
+            <Button 
+              type="button" 
+              variant="outline" 
+              size="icon"
+              onClick={onCancel}
+              className="rounded-full"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Cancel</span>
+            </Button>
+          )}
+          <Button type="submit" disabled={loading}>
+            {loading ? "Logging..." : "Log Meal"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
