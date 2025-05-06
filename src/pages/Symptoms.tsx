@@ -83,10 +83,11 @@ const Symptoms = () => {
                 <DialogTitle>Log a Symptom</DialogTitle>
               </DialogHeader>
               <SymptomForm 
-                onSuccess={() => {
+                onComplete={() => {
                   setDialogOpen(false);
                   loadSymptoms();
-                }} 
+                }}
+                onCancel={() => setDialogOpen(false)}
               />
             </DialogContent>
           </Dialog>

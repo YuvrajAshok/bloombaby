@@ -52,6 +52,7 @@ const formSchema = z.object({
 interface SymptomFormProps {
   onComplete: () => void;
   onCancel: () => void;
+  onSuccess?: () => void; // Add this optional prop to match what Symptoms.tsx is passing
 }
 
 const symptomTypes = [
@@ -66,9 +67,10 @@ const symptomTypes = [
   "Other",
 ];
 
-const severityLevels = ["Mild", "Moderate", "Severe"];
+// Changed to lowercase to match the Symptom type
+const severityLevels = ["mild", "moderate", "severe"];
 
-const SymptomForm = ({ onComplete, onCancel }: SymptomFormProps) => {
+const SymptomForm = ({ onComplete, onCancel, onSuccess }: SymptomFormProps) => {
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -83,8 +85,8 @@ const SymptomForm = ({ onComplete, onCancel }: SymptomFormProps) => {
     const newSymptom: Symptom = {
       id: uuidv4(),
       date: values.date,
-      type: values.type,
-      severity: values.severity as "Mild" | "Moderate" | "Severe",
+      symptomType: values.type,
+      severity: values.severity as "mild" | "moderate" | "severe",
       notes: values.notes,
     };
 
@@ -102,6 +104,11 @@ const SymptomForm = ({ onComplete, onCancel }: SymptomFormProps) => {
 
     // Call the onComplete callback
     onComplete();
+    
+    // Also call onSuccess if provided
+    if (onSuccess) {
+      onSuccess();
+    }
   };
 
   return (
@@ -195,7 +202,7 @@ const SymptomForm = ({ onComplete, onCancel }: SymptomFormProps) => {
                 <SelectContent>
                   {severityLevels.map((level) => (
                     <SelectItem key={level} value={level}>
-                      {level}
+                      {level.charAt(0).toUpperCase() + level.slice(1)}
                     </SelectItem>
                   ))}
                 </SelectContent>
