@@ -1,10 +1,22 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Baby, Heart, BookOpen, Calendar, Home, Bot, Phone, Clock, Bell } from "lucide-react";
+import { 
+  Baby, 
+  FileText, 
+  SmilePlus, 
+  Utensils, 
+  Activity, 
+  BookOpen, 
+  Calendar, 
+  Home, 
+  Bot, 
+  Phone, 
+  Clock, 
+  Bell 
+} from "lucide-react";
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -90,25 +102,25 @@ export function Sidebar() {
               <NavItem
                 title="Symptoms"
                 to="/symptoms"
-                icon={<Heart className="h-5 w-5" />}
+                icon={<FileText className="h-5 w-5" />}
                 isCollapsed={isCollapsed}
               />
               <NavItem
                 title="Mood"
                 to="/mood"
-                icon={<Heart className="h-5 w-5" />}
+                icon={<SmilePlus className="h-5 w-5" />}
                 isCollapsed={isCollapsed}
               />
               <NavItem
                 title="Nutrition"
                 to="/nutrition"
-                icon={<Heart className="h-5 w-5" />}
+                icon={<Utensils className="h-5 w-5" />}
                 isCollapsed={isCollapsed}
               />
               <NavItem
                 title="Exercise"
                 to="/exercise"
-                icon={<Heart className="h-5 w-5" />}
+                icon={<Activity className="h-5 w-5" />}
                 isCollapsed={isCollapsed}
               />
               <NavItem
