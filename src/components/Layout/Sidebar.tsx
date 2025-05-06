@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -15,7 +16,8 @@ import {
   Bot, 
   Phone, 
   Clock, 
-  Bell 
+  Bell,
+  HeartPulse 
 } from "lucide-react";
 
 export function Sidebar() {
@@ -132,7 +134,7 @@ export function Sidebar() {
               <NavItem
                 title="Hospitals"
                 to="/hospitals"
-                icon={<Heart className="h-5 w-5" />}
+                icon={<HeartPulse className="h-5 w-5" />}
                 isCollapsed={isCollapsed}
               />
               <NavItem
