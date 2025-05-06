@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { Trash2 } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import AppLayout from "@/components/Layout/AppLayout";
 import { getCurrentUser, getSymptoms, deleteSymptom } from "@/utils/localStorage";
 import { Symptom } from "@/types";
@@ -15,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Table,
@@ -79,8 +80,14 @@ const Symptoms = () => {
               <Button>Log New Symptom</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
+              <DialogHeader className="flex flex-row justify-between items-center">
                 <DialogTitle>Log a Symptom</DialogTitle>
+                <DialogClose asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full">
+                    <X className="h-4 w-4" />
+                    <span className="sr-only">Close</span>
+                  </Button>
+                </DialogClose>
               </DialogHeader>
               <SymptomForm 
                 onComplete={() => {

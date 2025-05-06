@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Define the form schema using Zod
@@ -240,9 +240,12 @@ const SymptomForm = ({ onComplete, onCancel, onSuccess }: SymptomFormProps) => {
           <Button
             type="button"
             variant="outline"
+            size="icon"
             onClick={onCancel}
+            className="rounded-full"
           >
-            Cancel
+            <X className="h-4 w-4" />
+            <span className="sr-only">Cancel</span>
           </Button>
           <Button type="submit">Save</Button>
         </div>
