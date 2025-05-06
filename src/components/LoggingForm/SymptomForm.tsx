@@ -1,19 +1,23 @@
 
 import { useState } from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
+import { format } from "date-fns";
+import { Symptom } from "@/types";
+import { saveSymptom } from "@/utils/localStorage";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -21,90 +25,161 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { saveSymptom } from "@/utils/localStorage";
 import { useToast } from "@/components/ui/use-toast";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const symptomSchema = z.object({
-  symptomType: z.string().min(1, { message: "Symptom type is required" }),
-  severity: z.enum(["mild", "moderate", "severe"]),
+// Define the form schema using Zod
+const formSchema = z.object({
+  date: z.date({
+    required_error: "A date is required.",
+  }),
+  type: z.string({
+    required_error: "Please select a symptom type.",
+  }),
+  severity: z.string({
+    required_error: "Please select a severity level.",
+  }),
   notes: z.string().optional(),
 });
 
-type SymptomFormValues = z.infer<typeof symptomSchema>;
-
 interface SymptomFormProps {
-  onSuccess?: () => void;
+  onComplete: () => void;
+  onCancel: () => void;
 }
 
-const SymptomForm = ({ onSuccess }: SymptomFormProps) => {
-  const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
+const symptomTypes = [
+  "Nausea",
+  "Fatigue",
+  "Headache",
+  "Back Pain",
+  "Swelling",
+  "Insomnia",
+  "Heartburn",
+  "Cramping",
+  "Other",
+];
 
-  const form = useForm<SymptomFormValues>({
-    resolver: zodResolver(symptomSchema),
+const severityLevels = ["Mild", "Moderate", "Severe"];
+
+const SymptomForm = ({ onComplete, onCancel }: SymptomFormProps) => {
+  const { toast } = useToast();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
-      symptomType: "",
-      severity: "mild",
+      date: new Date(),
       notes: "",
     },
   });
 
-  const onSubmit = (data: SymptomFormValues) => {
-    setLoading(true);
-    
-    // Ensure all required properties are explicitly set
-    const newSymptom = {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    // Create the symptom object
+    const newSymptom: Symptom = {
       id: uuidv4(),
-      date: new Date(),
-      symptomType: data.symptomType,
-      severity: data.severity,
-      notes: data.notes,
+      date: values.date,
+      type: values.type,
+      severity: values.severity as "Mild" | "Moderate" | "Severe",
+      notes: values.notes,
     };
-    
-    try {
-      saveSymptom(newSymptom);
-      console.log("Symptom logged:", newSymptom);
-      
-      toast({
-        title: "Symptom logged",
-        description: "Your symptom has been recorded",
-      });
-      
-      form.reset();
-      
-      if (onSuccess) {
-        onSuccess();
-      }
-    } catch (error) {
-      console.error("Error saving symptom:", error);
-      toast({
-        title: "Error",
-        description: "Failed to save symptom. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+
+    // Save to localStorage
+    saveSymptom(newSymptom);
+
+    // Show success notification
+    toast({
+      title: "Symptom logged successfully",
+      description: `${values.severity} ${values.type} on ${format(
+        values.date,
+        "MMM d, yyyy"
+      )}`,
+    });
+
+    // Call the onComplete callback
+    onComplete();
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="symptomType"
+          name="date"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Symptom Type</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g. Nausea, Headache, Fatigue" {...field} />
-              </FormControl>
+            <FormItem className="flex flex-col">
+              <FormLabel>Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Select the date when you experienced this symptom.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        
+
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Symptom Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a symptom" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {symptomTypes.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>
+                Select the type of symptom you experienced.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <FormField
           control={form.control}
           name="severity"
@@ -118,37 +193,52 @@ const SymptomForm = ({ onSuccess }: SymptomFormProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="mild">Mild</SelectItem>
-                  <SelectItem value="moderate">Moderate</SelectItem>
-                  <SelectItem value="severe">Severe</SelectItem>
+                  {severityLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+              <FormDescription>
+                How severe was this symptom?
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        
+
         <FormField
           control={form.control}
           name="notes"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes (optional)</FormLabel>
+              <FormLabel>Notes</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Add any additional details about this symptom"
+                  placeholder="Any additional details about this symptom..."
                   className="resize-none"
                   {...field}
                 />
               </FormControl>
+              <FormDescription>
+                Optional details about this symptom.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Logging..." : "Log Symptom"}
-        </Button>
+
+        <div className="flex justify-end space-x-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+          <Button type="submit">Save</Button>
+        </div>
       </form>
     </Form>
   );

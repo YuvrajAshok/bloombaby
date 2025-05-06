@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { saveKickCount, getKickCounts } from "@/utils/localStorage";
+import { saveKickCount, getKickCounts, deleteKickCount } from "@/utils/localStorage";
 import { KickCount } from "@/types";
 import { Timer, Baby, Trash2, Clock, Calendar } from "lucide-react";
 
@@ -82,9 +82,10 @@ const KickCounter = () => {
   };
 
   const handleDelete = (id: string) => {
-    // Add deleteKickCount functionality in localStorage.ts
-    // For now we'll just filter the state
-    setPastCounts(pastCounts.filter(record => record.id !== id));
+    // Use the deleteKickCount function from localStorage.ts
+    deleteKickCount(id);
+    // Update the UI after deletion
+    loadPastCounts();
     
     toast({
       title: "Record deleted",

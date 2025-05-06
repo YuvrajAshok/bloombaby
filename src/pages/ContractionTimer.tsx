@@ -15,9 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { saveContractionSession, getContractionSessions, saveContraction } from "@/utils/localStorage";
+import {
+  saveContractionSession,
+  getContractionSessions,
+  saveContraction,
+  deleteContractionSession
+} from "@/utils/localStorage";
 import { Contraction, ContractionSession } from "@/types";
-import { Timer, PlayCircle, PauseCircle, StopCircle, AlertTriangle } from "lucide-react";
+import { Timer, PlayCircle, PauseCircle, StopCircle, AlertTriangle, Trash2 } from "lucide-react";
 
 const ContractionTimer = () => {
   const { toast } = useToast();
@@ -179,6 +184,16 @@ const ContractionTimer = () => {
     setCurrentSession(null);
     setElapsedTime(0);
     setContractionDuration(0);
+  };
+
+  const deleteSession = (id: string) => {
+    deleteContractionSession(id);
+    loadPastSessions();
+    
+    toast({
+      title: "Session deleted",
+      description: "Contraction session has been removed"
+    });
   };
 
   const formatTime = (seconds: number) => {
@@ -413,11 +428,21 @@ const ContractionTimer = () => {
             <h2 className="text-xl font-medium">Past Sessions</h2>
             <div className="grid grid-cols-1 gap-4">
               {pastSessions.map((session) => (
-                <Card key={session.id}>
+                <Card key={session.id} className="group">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">
-                      {format(new Date(session.date), "MMM d, yyyy")}
-                    </CardTitle>
+                    <div className="flex justify-between">
+                      <CardTitle className="text-lg">
+                        {format(new Date(session.date), "MMM d, yyyy")}
+                      </CardTitle>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => deleteSession(session.id)}
+                        className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
                     <CardDescription>
                       {format(new Date(session.startTime), "h:mm a")} - 
                       {session.endTime && format(new Date(session.endTime), " h:mm a")}
