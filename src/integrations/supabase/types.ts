@@ -10,11 +10,366 @@ export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "12.2.12 (cd3cf9e)"
+    PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      appointments: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          location: string | null
+          notes: string | null
+          reminder: boolean
+          reminder_time: string | null
+          time: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          id?: string
+          location?: string | null
+          notes?: string | null
+          reminder?: boolean
+          reminder_time?: string | null
+          time: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          location?: string | null
+          notes?: string | null
+          reminder?: boolean
+          reminder_time?: string | null
+          time?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      birth_plan_items: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          notes: string | null
+          preference: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          preference: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          preference?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      contraction_sessions: {
+        Row: {
+          created_at: string
+          date: string
+          end_time: string | null
+          id: string
+          is_active: boolean
+          start_time: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          end_time?: string | null
+          id?: string
+          is_active?: boolean
+          start_time: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          end_time?: string | null
+          id?: string
+          is_active?: boolean
+          start_time?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      contractions: {
+        Row: {
+          created_at: string
+          date: string
+          duration: number | null
+          end_time: string | null
+          id: string
+          intensity: string
+          notes: string | null
+          session_id: string
+          start_time: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          duration?: number | null
+          end_time?: string | null
+          id?: string
+          intensity: string
+          notes?: string | null
+          session_id: string
+          start_time: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          duration?: number | null
+          end_time?: string | null
+          id?: string
+          intensity?: string
+          notes?: string | null
+          session_id?: string
+          start_time?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contractions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "contraction_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      emergency_contacts: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          phone: string
+          relationship: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          phone: string
+          relationship: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string
+          relationship?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      exercises: {
+        Row: {
+          created_at: string
+          date: string
+          duration: number
+          id: string
+          intensity: string
+          notes: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          duration: number
+          id?: string
+          intensity: string
+          notes?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          duration?: number
+          id?: string
+          intensity?: string
+          notes?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      kick_counts: {
+        Row: {
+          count: number
+          created_at: string
+          date: string
+          duration: number | null
+          end_time: string | null
+          id: string
+          notes: string | null
+          start_time: string
+          user_id: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          date?: string
+          duration?: number | null
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time: string
+          user_id: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          date?: string
+          duration?: number | null
+          end_time?: string | null
+          id?: string
+          notes?: string | null
+          start_time?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      moods: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          mood: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          mood: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          mood?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      nutrition_logs: {
+        Row: {
+          created_at: string
+          date: string
+          food_items: string[]
+          id: string
+          meal_type: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          food_items: string[]
+          id?: string
+          meal_type: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          food_items?: string[]
+          id?: string
+          meal_type?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          current_trimester: number | null
+          due_date: string | null
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_trimester?: number | null
+          due_date?: string | null
+          id?: string
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_trimester?: number | null
+          due_date?: string | null
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      symptoms: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          notes: string | null
+          severity: string
+          symptom_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          notes?: string | null
+          severity: string
+          symptom_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          notes?: string | null
+          severity?: string
+          symptom_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
