@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { saveUser, getUsers, setCurrentUser } from "@/utils/localStorage";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -64,58 +64,71 @@ const AuthForm = () => {
     },
   });
 
-  const onLoginSubmit = (data: LoginFormValues) => {
-    const users = getUsers();
-    const user = users.find(
-      (u) => u.email === data.email && u.password === data.password
-    );
-
-    if (user) {
-      setCurrentUser(user);
-      toast({
-        title: "Login successful",
-        description: `Welcome back, ${user.name}!`,
+  const onLoginSubmit = async (data: LoginFormValues) => {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
-      navigate("/");
-    } else {
+
+      if (error) {
+        toast({
+          title: "Login failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Login successful",
+          description: "Welcome back!",
+        });
+        navigate("/");
+      }
+    } catch (error) {
       toast({
         title: "Login failed",
-        description: "Invalid email or password",
+        description: "An unexpected error occurred.",
         variant: "destructive",
       });
     }
   };
 
-  const onRegisterSubmit = (data: RegisterFormValues) => {
-    const users = getUsers();
-    const existingUser = users.find((u) => u.email === data.email);
+  const onRegisterSubmit = async (data: RegisterFormValues) => {
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            name: data.name,
+            due_date: data.dueDate?.toISOString(),
+          }
+        }
+      });
 
-    if (existingUser) {
+      if (error) {
+        toast({
+          title: "Registration failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Registration successful",
+          description: "Please check your email to confirm your account.",
+        });
+        navigate("/");
+      }
+    } catch (error) {
       toast({
         title: "Registration failed",
-        description: "Email already in use",
+        description: "An unexpected error occurred.",
         variant: "destructive",
       });
-      return;
     }
-
-    // Create new user with all required properties
-    const newUser = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      dueDate: data.dueDate,
-      currentTrimester: data.dueDate ? undefined : undefined, // Will be calculated on login
-    };
-
-    saveUser(newUser);
-    setCurrentUser(newUser);
-
-    toast({
-      title: "Registration successful",
-      description: "Your account has been created",
-    });
-    navigate("/");
   };
 
   return (
