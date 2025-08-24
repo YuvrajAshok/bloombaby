@@ -1,7 +1,5 @@
 
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getCurrentUser } from "@/utils/localStorage";
 import AppLayout from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BabySizeCard from "@/components/Home/BabySizeCard";
@@ -12,27 +10,6 @@ import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  
-  useEffect(() => {
-    const user = getCurrentUser();
-    if (!user) {
-      navigate("/auth");
-    } else {
-      setIsLoading(false);
-    }
-  }, [navigate]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading BloomBaby...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <AppLayout>
